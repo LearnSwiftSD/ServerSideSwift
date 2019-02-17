@@ -1,3 +1,8 @@
 /ServerSideSwift.playground
 /.DS_Store
-
+/SwiftCastRank/Packages
+/SwiftCastRank/.build
+/SwiftCastRank/xcuserdata
+/SwiftCastRank/*.xcodeproj
+/SwiftCastRank/DerivedData/
+/SwiftCastRank/.DS_Store
