@@ -20,8 +20,8 @@ final class Host: SQLiteModel {
     
 }
 
-#warning("TODO: Setup conformances")
-
+extension Host: Content {}
+extension Host: Parameter {}
 extension Host: Migration {}
 
 struct HostInfo: SQLiteJSONType {
