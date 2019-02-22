@@ -14,9 +14,28 @@ final class Host: SQLiteModel {
         self.info = HostInfo(swiftCasts: [:])
     }
     
-    #warning("TODO: Setup property `swiftCasts` siblings")
+    var swiftCasts: Siblings<Host, SwiftCast, SwiftCastHostPivot> {
+        return siblings()
+    }
     
-    #warning("TODO: Setup your willCreate/didCreate life cycle methods")
+    func willCreate(on conn: SQLiteConnection) throws -> EventLoopFuture<Host> {
+        return Host.query(on: conn)
+            .filter(\.name == name).first()
+            .map(to: Host?.self) { host in
+                let exists = "Already exists!"
+                if host != nil { throw Abort(.conflict, reason: exists) }
+                return host
+            }
+            .transform(to: self)
+        
+    }
+    
+    func willDelete(on conn: SQLiteConnection) throws -> EventLoopFuture<Host> {
+        return try SwiftCastHostPivot.query(on: conn)
+            .filter(\.hostID == self.requireID()).all()
+            .chainMap { $0.map { $0.delete(on: conn) } }
+            .transform(to: self)
+    }
     
 }
 
