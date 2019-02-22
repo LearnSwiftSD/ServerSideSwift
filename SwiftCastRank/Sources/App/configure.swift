@@ -12,7 +12,8 @@ public func configure(
     try services.register(FluentSQLiteProvider())
     
     //Directory services
-    #warning("TODO: Setup your directory config")
+    let directoryConfig = DirectoryConfig.detect()
+    services.register(directoryConfig)
     
     // Register routes to the router
     let router = EngineRouter.default()
@@ -25,8 +26,7 @@ public func configure(
     services.register(middlewares)
     
     // Configure a SQLite database
-    #warning("TODO: Setup you SQLite DB with file location")
-    let sqlite = try SQLiteDatabase(storage: .memory)
+    let sqlite = try SQLiteDatabase(storage: .file(path: "\(directoryConfig.workDir)swiftCastRank.db"))
     
     // Register the configured SQLite database to the database config.
     var databases = DatabasesConfig()
